@@ -8,6 +8,7 @@
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
+<script type="text/javascript" src="effects.json"></script>
 
 <link
     rel="stylesheet"
@@ -21,19 +22,26 @@
     <h3>pCR increase</h3>
     <div class="row align-items-center">
         <div class="col-sm-2"><p id="value-vertical"></p></div>
-        <div class="col-sm"><div id="slider-vertical"></div></div>
-    </div>
-    <h3>Cost of intervention</h3>
-    <div class="row align-items-center">
-        <div class="col-sm-2"><p id="value-cost"></p></div>
-        <div class="col-sm"><div id="slider-cost"></div></div>
-    </div>
-    <h3>Willingness to pay per life-year</h3>
-    <div class="row align-items-center">
-        <div class="col-sm-2"><p id="value-wtp"></p></div>
-        <div class="col-sm"><div id="slider-wtp"></div></div>
+        <div class="col-sm-2"><div id="slider-vertical"></div></div>
+        <div id="my_dataviz"></div>
     </div>
 
+
+    <div class="row align-items-center">
+        <div class="col-sm-2"><p id="value-cost"></p></div>
+        <div class="col-sm">
+            <h5>Cost of intervention</h5>
+            <div id="slider-cost"></div></div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-sm-2"><p id="value-wtp"></p></div>
+        <div class="col-sm">
+            <h5>Willingness to pay per life-year</h5>
+            <div id="slider-wtp"></div></div>
+    </div>
+    <!-- Select subtype -->
+    <div id="subtype_choice"></div>
 </div>
 
 <!-- Include my script.js file -->
