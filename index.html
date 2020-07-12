@@ -17,31 +17,62 @@
     crossorigin="anonymous"
 />
 
+<!-- <style>
+     .letterP4 {
+   -webkit-transform: rotate(-90deg);
+   -moz-transform: rotate(-90deg);
+   -ms-transform: rotate(-90deg);
+   -o-transform: rotate(-90deg);
+     transform: rotate(-90deg);
+     color: #000;
+     font-size: 16px;
+     height: 16px;
+     width: 200px;
+     float: left;
+     vertical-align:center;
+     }
+     </style>
+-->
 <div class="container">
-    <h1>Cost-Effectiveness calculator</h1>
-    <h3>pCR increase</h3>
+    <h1>Cost-Effectiveness Calculator based on pCR rate</h1>
     <div class="row align-items-center">
-        <div class="col-sm-2"><p id="value-vertical"></p></div>
-        <div class="col-sm-2"><div id="slider-vertical"></div></div>
+        <!-- <div class="col-sm-2"><p id="value-vertical"></p></div> -->
+        <div class="col-sm-2">
+            <div class="row align-items-center">
+                <!-- <div class="letterP4">Improvement in pCR rate</div> -->
+                <h6 class="text-center">pCR improvement</h6>
+                <div id="slider-vertical"></div>
+            </div>
+        </div>
         <div id="my_dataviz"></div>
     </div>
-
-
-    <div class="row align-items-center">
-        <div class="col-sm-2"><p id="value-cost"></p></div>
-        <div class="col-sm">
-            <h5>Cost of intervention</h5>
-            <div id="slider-cost"></div></div>
+    <div class="row align-items-top">
+        <div class="col-sm-3">
+            <div class="col align-items-center">
+                <h6 class="text-left">Breast cancer subtype</h6>
+                <div id="subtype_choice"></div>
+            </div>
+        </div>
+        <div class="col align-items-center">
+            <div class="row align-items-center">
+                <!-- <div class="col-sm-2"><p id="value-cost"></p></div> -->
+                <div class="row align-items-center">
+                    <div class="col-sm">
+                        <h6 class="text-center">Cost of intervention</h6>
+                        <div id="slider-cost"></div></div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <!-- <div class="col-sm-2"><p id="value-wtp"></p></div> -->
+                <div class="row align-items-center">
+                    <div class="col-sm">
+                        <h6 class="text-center">Willingness to pay per life-year</h6>
+                        <div id="slider-wtp"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="row align-items-center">
-        <div class="col-sm-2"><p id="value-wtp"></p></div>
-        <div class="col-sm">
-            <h5>Willingness to pay per life-year</h5>
-            <div id="slider-wtp"></div></div>
-    </div>
-    <!-- Select subtype -->
-    <div id="subtype_choice"></div>
 </div>
 
 <!-- Include my script.js file -->

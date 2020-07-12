@@ -1,13 +1,13 @@
 // Load simulation data
 var local_data = data;
 
-
+// https://github.com/johnwalley/d3-simple-slidre
 // Vertical slider
 var sliderVertical = d3
     .sliderLeft()
     .min(0)
     .max(1)
-    .height(300)
+    .height(700)
     .tickFormat(d3.format('.0%'))
     .ticks(6)
     .step(0.01)
@@ -21,9 +21,9 @@ var gVertical = d3
     .select('div#slider-vertical')
     .append('svg')
     .attr('width', 100)
-    .attr('height', 400)
+    .attr('height', 800)
     .append('g')
-    .attr('transform', 'translate(60,30)');
+    .attr('transform', 'translate(70,30)');
 
 gVertical.call(sliderVertical);
 
@@ -34,7 +34,7 @@ var sliderCost = d3
     .sliderBottom()
     .min(0)
     .max(150000)
-    .width(300)
+    .width(600)
     .tickFormat(d3.format('$,.2r'))
     // d3.format("($.2f")
     .ticks(3)
@@ -47,10 +47,10 @@ var sliderCost = d3
 var gCost = d3
     .select('div#slider-cost')
     .append('svg')
-    .attr('width', 500)
+    .attr('width', 700)
     .attr('height', 100)
     .append('g')
-    .attr('transform', 'translate(30,30)');
+    .attr('transform', 'translate(30,10)');
 
 gCost.call(sliderCost);
 
@@ -61,9 +61,8 @@ var sliderWtp = d3
     .sliderBottom()
     .min(0)
     .max(150000)
-    .width(300)
+    .width(600)
     .tickFormat(d3.format('$,.2r'))
-    // d3.format("($.2f")
     .ticks(3)
     .step(10000)
     .default(100000)
@@ -74,10 +73,10 @@ var sliderWtp = d3
 var gWtp = d3
     .select('div#slider-wtp')
     .append('svg')
-    .attr('width', 500)
+    .attr('width', 700)
     .attr('height', 100)
     .append('g')
-    .attr('transform', 'translate(30,30)');
+    .attr('transform', 'translate(30,10)');
 
 gWtp.call(sliderWtp);
 
@@ -135,9 +134,9 @@ dropdownButton.on("change", function(d) {
 // Plot surface
 
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 10, bottom: 50, left: 80},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+var margin = {top: 50, right: 20, bottom: 100, left: 120},
+    width = 700 - margin.left - margin.right,
+    height = 900 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -153,19 +152,19 @@ var svg = d3.select("#my_dataviz")
     .domain([0, 5])
     .range([ 0, width ]);
   svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + height / 2 + ")")
     .call(d3.axisBottom(x));
 
 
 // Add the text label for the x axis
 svg.append("text")
-    .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom - 5) + ")")
+    .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom - 70) + ")")
     .style("text-anchor", "middle")
     .text("Life-years gained");
 
 // Add Y axis
 var y = d3.scaleLinear()
-    .domain([0, 500000])
+    .domain([-500000, 500000])
       .range([ height, 0]);
   svg.append("g")
     .call(d3.axisLeft(y)
@@ -175,11 +174,11 @@ var y = d3.scaleLinear()
 // Add the text label for the Y axis
 svg.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
+    .attr("y", 0 - margin.left + 20)
     .attr("x",0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Cost reduction");
+    .text("Cost difference");
 
 // Add dots
   svg.append('g')
