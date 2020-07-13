@@ -8,6 +8,7 @@
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
+<!-- https://www.w3schools.com/js/js_json.asp -->
 <script type="text/javascript" src="effects.json"></script>
 
 <link
@@ -48,9 +49,30 @@
     </div>
     <div class="row align-items-top">
         <div class="col-sm-3">
-            <div class="col align-items-center">
+            <div class="col align-items-left">
                 <h6 class="text-left">Breast cancer subtype</h6>
                 <div id="subtype_choice"></div>
+                <form action="#" method="post" class="subForm" id="subForm">
+                    <fieldset>
+                        <!-- <legend>Demo: Get Value of Selected</legend>
+
+                             <p>Select a shipping method:</p> -->
+                        <p>
+                            <label><input type="radio" name="sub" value="HR-,HER2-" checked /> HR-,HER2-</label><br>
+                            <label><input type="radio" name="sub" value="HR+,HER2-" /> HR+,HER2-</label><br>
+                            <label><input type="radio" name="sub" value="HR-,HER2+" /> HR-,HER2+</label><br>
+                            <label><input type="radio" name="sub" value="HR+,HER2+" /> HR+,HER2+</label>
+                        </p>
+                    </fieldset>
+                </form>
+                <!DOCTYPE html>
+                <meta charset="utf-8">
+
+                <!-- Load d3.js -->
+                <script src="https://d3js.org/d3.v4.js"></script>
+
+                <!-- Initialize a select button -->
+                <select id="selectButton"></select>
             </div>
         </div>
         <div class="col align-items-center">
