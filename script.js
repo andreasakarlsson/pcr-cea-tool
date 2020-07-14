@@ -1,5 +1,5 @@
 // Load simulation data
-var data = mdata;
+// var data = mdata;
 
 // https://github.com/johnwalley/d3-simple-slidre
 // Vertical slider
@@ -82,149 +82,79 @@ gWtp.call(sliderWtp);
 
 d3.select('p#value-wtp').text(d3.format('.0f')(sliderWtp.value()));
 
+// // poor mans error bars
+// var errorBarArea = d3.svg.area()
+//     .x(function(d) {return x(d.state); })
+//     .y0(function(d) {return y(d.value - d.moe); })
+//     .y1(function(d) {return y(d.value + d.moe); })
+//     .interpolate("linear");
+
+// var errorBarSVG = d3.select("body").append("svg")
+
+// var errorBars = errorBarSVG.selectAll("path")
+//          .data(data);
+
+// errorBars.enter().append("path");
+
+// errorBars.attr("d", function(d){return errorBarArea([d]);})
+//              //turn the data into a one-element array
+//              //and pass it to the area function
+//     .attr("stroke", "red")
+//     .attr("stroke-width", 1.5);
 
 // Select subtype
-
-// Create data = list of groups
-var allGroup = ["HR-,HER2-", "HR+,HER2-", "HR-,HER2+", "HR+,HER2+"]
-
-// Initialize the button
-var dropdownButton = d3.select("#subtype_choice")
-  .append('select')
-
-// add the options to the button
-dropdownButton // Add a button
-  .selectAll('myOptions') // Next 4 lines add 6 options = 6 colors
- 	.data(allGroup)
-  .enter()
-	.append('option')
-  .text(function (d) { return d; }) // text showed in the menu
-    .attr("value", function (d) { return d; }) // corresponding value returned by the button
-
-// // Initialize a circle
-// var zeCircle = d3.select("#subtype_choice")
-//   .append("svg")
-//   .append("circle")
-//     .attr("cx", 100)
-//     .attr("cy", 70)
-//     .attr("stroke", "black")
-//     .style("fill", "yellow")
-//     .attr("r", 20)
-
-// // A function that update the color of the circle
-// function updateChart(mycolor) {
-//   zeCircle
-//     .transition()
-//     .duration(1000)
-//     .style("fill", mycolor)
-// }
-
-// A function that update the color of the circle
-// function updateData(selectedSubtype) {
-//     for (x in data) {
-//         if (data[x]["sub"] == selectedSubtype) {
-//             if (data[x]["scale"] == "ly") {
-//                 var ly = parseFloat(data[x]["val"]);
-//                 var ly_low = parseFloat(data[x]["low"]);
-//                 var ly_high = parseFloat(data[x]["high"]);
+// function getSubData (sub) {
+//     for (i in mdata) {
+//         if (mdata[i]["sub"] == sub) {
+//             if (mdata[i]["scale"] == "ly") {
+//                 var ly = parseFloat(mdata[i]["val"]);
+//                 var ly_low = parseFloat(mdata[i]["low"]);
+//                 var ly_high = parseFloat(mdata[i]["high"]);
 //             }
-//             if (data[x]["scale"] == "cost") {
-//                 // var costs = {cost:parseFloat(data[x]["val"]), cost_low:parseFloat(data[x]["low"]), cost_high:parseFloat(data[x]["high"])};
-//                 var cost = parseFloat(data[x]["val"]);
-//                 var cost_low = parseFloat(data[x]["low"]);
-//                 var cost_high = parseFloat(data[x]["high"]);
+//             if (mdata[i]["scale"] == "cost") {
+//                 // var costs = {cost:parseFloat(mdata[i]["val"]), cost_low:parseFloat(mdata[i]["low"]), cost_high:parseFloat(mdata[i]["high"])};
+//                 var cost = parseFloat(mdata[i]["val"]);
+//                 var cost_low = parseFloat(mdata[i]["low"]);
+//                 var cost_high = parseFloat(mdata[i]["high"]);
 //             }
-//             var adata = [ {x:2, y:200000}, {x:3, y:90000}, {x:1, y:50000} ];
+//             var out = [ {ly, ly_low, ly_high, cost, cost_low, cost_high} ];
 //             // append vectors
 //         }
 //     }
-//     return adata
+//     return out
 // }
 
 
-// When the button is changed, run the updateChart function
-dropdownButton.on("change",function(d) {
-
-    // recover the option that has been chosen
-    var selectedOption = d3.select(this).property("value")
-
-    // run the updateChart function with this selected option
-    // updateChart(selectedOption)
-    // updateData(selectedOption)
-
-    for (x in data) {
-        if (data[x]["sub"] == selectedOption) {
-            if (data[x]["scale"] == "ly") {
-                var ly = parseFloat(data[x]["val"]);
-                var ly_low = parseFloat(data[x]["low"]);
-                var ly_high = parseFloat(data[x]["high"]);
+function getSubData (sub) {
+    for (i in mdata) {
+        if (mdata[i]["sub"] == sub) {
+            if (mdata[i]["scale"] == "ly") {
+                var ly = parseFloat(mdata[i]["val"]) * sliderVertical.value();
+                var ly_low = parseFloat(mdata[i]["low"]) * sliderVertical.value();
+                var ly_high = parseFloat(mdata[i]["high"]) * sliderVertical.value();
             }
-            if (data[x]["scale"] == "cost") {
-                // var costs = {cost:parseFloat(data[x]["val"]), cost_low:parseFloat(data[x]["low"]), cost_high:parseFloat(data[x]["high"])};
-                var cost = parseFloat(data[x]["val"]);
-                var cost_low = parseFloat(data[x]["low"]);
-                var cost_high = parseFloat(data[x]["high"]);
+            if (mdata[i]["scale"] == "cost") {
+                // var costs = {cost:parseFloat(mdata[i]["val"]), cost_low:parseFloat(mdata[i]["low"]), cost_high:parseFloat(mdata[i]["high"])};
+                var cost = parseFloat(mdata[i]["val"]) * sliderVertical.value() - sliderCost.value();
+                var cost_low = parseFloat(mdata[i]["low"]) * sliderVertical.value() - sliderCost.value();
+                var cost_high = parseFloat(mdata[i]["high"]) * sliderVertical.value() - sliderCost.value();
             }
-            // var adata = [ {x:2, y:200000}, {x:3, y:90000}, {x:1, y:50000} ];
+            var out = [ {ly, ly_low, ly_high, cost, cost_low, cost_high} ] ;
             // append vectors
         }
     }
-    window.alert(cost);
-})
-
-
-
-function getRadioVal(form, name) {
-    var val;
-    // get list of radio buttons with specified name
-    var radios = form.elements[name];
-
-    // loop through list of radio buttons
-    for (var i=0, len=radios.length; i<len; i++) {
-        if ( radios[i].checked ) { // radio checked?
-            val = radios[i].value; // if so, hold its value in val
-            break; // and break out of for loop
-        }
-    }
-    if (val == "HR+,HER2-") {
-        var val = [ {x:2, y:500000}, {x:3, y:90000}, {x:1, y:50000} ];
-    } else {
-        var val = [ {x:2, y:100000}, {x:3, y:90000}, {x:1, y:50000} ];
-    }
-    return val; // return value of checked radio or undefined if none checked
+    return out
 }
 
-var val = getRadioVal( document.getElementById('subForm'), 'sub' );
-// alert(val);
 
 function updateGraph(sub) {
-    if (sub == "HR+,HER2-") {
-        var newval = [ {x:2, y:500000}, {x:3, y:90000}, {x:1, y:50000} ];
-        window.alert(sub);
-    } else {
-        var newval = [ {x:2, y:100000}, {x:3, y:90000}, {x:1, y:50000} ];
-    }
     dot
-        .data(newval) // set the new data
+        .data(getSubData(sub)) // set the new data
         .transition()
         .duration(1000)
-        .attr("cx", function(d) { return x(d.x) })
-        .attr("cy", function(d) { return y(d.y) })
+        .attr("cx", function(d) { return x(d.ly) })
+        .attr("cy", function(d) { return y(-d.cost) })
 }
-
-
-document.getElementById('subForm').onsubmit = function() {
-    // this (keyword) refers to form to which onsubmit attached
-    // 'sub' is name of radio button group
-    var val = getRadioVal(this, 'sub');
-    // display value obtained
-    alert(val);
-    // more code here ...
-
-    // apply the new data values
-    updateGraph(val)
-}
-
 
 // List of groups (here I have one group per column)
 var allGroup = ["HR-,HER2-", "HR+,HER2-", "HR-,HER2+", "HR+,HER2+"]
@@ -272,7 +202,7 @@ svg.append("text")
 
 // Add Y axis
 var y = d3.scaleLinear()
-    .domain([-500000, 500000])
+    .domain([-300000, 300000])
       .range([ height, 0]);
   svg.append("g")
     .call(d3.axisLeft(y)
@@ -288,29 +218,57 @@ svg.append("text")
     .style("text-anchor", "middle")
     .text("Cost difference");
 
-// var adata = [ {x:2, y:200000}, {x:3, y:90000}, {x:1, y:50000} ]
-
-// Add dots
-// svg.append('g')
-//     .selectAll("dot")
-//     .data(getRadioVal( document.getElementById('subForm'), 'sub' ))
-//     .enter()
-//     .append("circle")
-//     .attr("cx", function (d) { return x(d.x); } )
-//     .attr("cy", function (d) { return y(d.y); } )
-//     .attr("r", 5)
-//     .style("fill", "#69b3a2")
-
 // Initialize dots with group a
 var dot = svg
     .selectAll('circle')
-    .data(val)
+    .data(getSubData("HR-,HER2-"))
     .enter()
     .append('circle')
-    .attr("cx", function(d) { return x(d.x) })
-    .attr("cy", function(d) { return y(d.y) })
+    .attr("cx", function(d) { return x(d.ly) })
+    .attr("cy", function(d) { return y(-d.cost) })
     .attr("r", 7)
     .style("fill", "#69b3a2")
+
+// Add the line
+
+// const line = d3.line()
+//     .x(function(d) { return xScale(d.date); })
+//     .y(function(d) { return yScale(d.measurement); });
+
+// let id = 0;
+// const ids = function () {
+//     return "line-"+id++;
+// }
+
+// var linedata = [{x:0, y:0}, {x:5, y:200000}];
+
+
+// var line = svg.append("path")
+//     .data(linedata)
+//     .attr("fill", "none")
+//     .attr("stroke", "steelblue")
+//     .attr("stroke-width", 1.5)
+//     .attr("d", d3.line()
+//           .x(function(d) { return x(d.x) })
+//           .y(function(d) { return y(d.y) })
+//          )
+// svg.append('line')
+//     .style("stroke", "lightgreen")
+//     .style("stroke-width", 2)
+//     .attr("x2", 3* 100)
+//     .attr("y2", 300);
+
+
+
+  // var eb = errorBar()
+  //         .oldXScale(x)
+  //         .xScale(x)
+  //         .oldYScale(y)
+  //         .yScale(y)
+  //         .yValue(function(d){return d.cost})
+  //         .xValue(function(d){return d.ly})
+  //         .xError(function(d){return d.ly_high - d.ly_low})
+  //         .yError(function(d){return null});
 
 // When the button is changed, run the updateChart function
 // https://www.d3-graph-gallery.com/graph/connectedscatter_select.html
@@ -320,50 +278,3 @@ d3.select("#selectButton").on("change", function(d) {
     // run the updateChart function with this selected option
     updateGraph(selectedOption)
 })
-
-
-// var data = mdata;
-// for (x in data) {
-//     if (data[x]["sub"] == "HR-,HER2-") {
-//         if (data[x]["scale"] == "ly") {
-//             var ly = parseFloat(data[x]["val"]);
-//             var ly_low = parseFloat(data[x]["low"]);
-//             var ly_high = parseFloat(data[x]["high"]);
-//         }
-//         if (data[x]["scale"] == "cost") {
-//             var costs = {cost:parseFloat(data[x]["val"]), cost_low:parseFloat(data[x]["low"]), cost_high:parseFloat(data[x]["high"])};
-//             // var costs = cost:parseFloat(data[x]["val"]);
-//             // var cost_low:parseFloat(data[x]["low"]);
-//             // var cost_high:parseFloat(data[x]["high"]);
-//         }
-//     }
-// }
-
-
-// for (x in data) {
-//     if (data[x]["sub"] == "HR-,HER2-") {
-//         if (data[x]["scale"] == "ly") {
-//             ly = parseFloat(data[x]["val"]);
-//             ly_low = parseFloat(data[x]["low"]);
-//             ly_high = parseFloat(data[x]["high"]);
-//         }
-//         if (data[x]["scale"] == "cost") {
-//             cost = parseFloat(data[x]["val"]);
-//             cost_low = parseFloat(data[x]["low"]);
-//             cost_high = parseFloat(data[x]["high"]);
-//         }
-//     }
-// }
-
-// JSON.stringify(local_data[2])
-// JSON_VALUES(local_data[2])
-
-// for (x in local_data) {
-//     JSON.parse(local_data[x])
-// }
-//local_data[2]["val"]
-// for (x in local_data) {
-//     JSON.parse(local_data[x])
-// }
-
-// local_data[2]["val"]
