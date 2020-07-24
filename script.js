@@ -168,7 +168,6 @@ d3.select("#selectButton")
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
-
 // Plot surface
 
 // set the dimensions and margins of the graph
@@ -272,9 +271,22 @@ var dot = svg
 
 // When the button is changed, run the updateChart function
 // https://www.d3-graph-gallery.com/graph/connectedscatter_select.html
-d3.select("#selectButton").on("change", function(d) {
+d3.select("#selectButton").on("click", function(d) {
     // recover the option that has been chosen
+    // alert(d3.select(this));
     var selectedOption = d3.select(this).property("value")
     // run the updateChart function with this selected option
     updateGraph(selectedOption)
 })
+
+
+
+// d3.selectAll(".global-control")
+//   .on("change.pie", changePieValue)
+
+// function changePieValue(_ctrl){
+//   var ctrlValue = _ctrl.grabYourValueHere;
+//   pieChart.readjustPie(_ctrlValue);
+//   d3.select('#pie-chart-container1')
+//     .call(pieChart)
+// }
