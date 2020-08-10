@@ -156,6 +156,13 @@ function updateGraph(sub) {
         .attr("cy", function(d) { return y(-d.cost) })
 }
 
+function updateWTP(wtp) {
+    line
+        .transition()
+        .duration(1000)
+        .attr("y2", wtp * 5)
+}
+
 // List of groups (here I have one group per column)
 var allGroup = ["HR-,HER2-", "HR+,HER2-", "HR-,HER2+", "HR+,HER2+"]
 
@@ -228,7 +235,28 @@ var dot = svg
     .attr("r", 7)
     .style("fill", "#69b3a2")
 
-// Add the line
+
+//Draw the line
+var line = svg.append('line')
+    .style("stroke", "blue")
+    .style("stroke-width", 0.02)
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", 5)
+    .attr("y2", sliderWtp.value() * 5)
+    .attr("transform", "translate(0," + height / 2 + "), scale(" + width / 5 + "," + -height / 600000 + ")")
+
+// .selectAll('line')
+    // .enter()
+    // .transition()
+    // .duration(1000)
+    // .attr("x1", 0)
+    // .attr("y1", 0)
+    // .attr("x2", 1000)
+    // .attr("y2", 10000)
+    // .style("stroke", "lightgreen")
+    // .style("stroke-width", 50)
+
 
 // const line = d3.line()
 //     .x(function(d) { return xScale(d.date); })
@@ -277,6 +305,14 @@ d3.select("#selectButton").on("click", function(d) {
     var selectedOption = d3.select(this).property("value")
     // run the updateChart function with this selected option
     updateGraph(selectedOption)
+})
+
+d3.select("#slider-wtp").onchange(function(d) {
+    // recover the option that has been chosen
+    // alert(d3.select(this));
+    gWtp.call(sliderWtp)
+    // run the updateChart function with this selected option
+    updateWTP(sliderWtp.value())
 })
 
 
