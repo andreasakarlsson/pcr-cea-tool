@@ -13,8 +13,10 @@ var sliderVertical = d3
     .step(0.01)
     .default(0.40)
     .fill('#2196f3')
-    .on('onchange', val => {
+    // https://github.com/johnwalley/d3-simple-slider
+    .on('end', val => {
         d3.select('p#value-vertical').text(d3.format('.2f')(val));
+        updateGraph(d3.select("#selectButton").property("value"));
     });
 
 var gVertical = d3
@@ -41,8 +43,9 @@ var sliderCost = d3
     .step(10000)
     .default(50000)
     .fill('#2196f3')
-    .on('onchange', val => {
+    .on('end', val => {
         d3.select('p#value-cost').text(d3.format('.0f')(val));
+        updateGraph(d3.select("#selectButton").property("value"));
     });
 var gCost = d3
     .select('div#slider-cost')
@@ -67,7 +70,7 @@ var sliderWtp = d3
     .step(10000)
     .default(100000)
     .fill('#2196f3')
-    .on('onchange', val => {
+    .on('end', val => {
         d3.select('p#value-wtp').text(d3.format('.0f')(val));
     });
 var gWtp = d3
@@ -80,6 +83,10 @@ var gWtp = d3
 
 gWtp.call(sliderWtp);
 
+// This returns the value of the slider
+sliderWtp.value()
+
+// This creates a div that can be shown from html
 d3.select('p#value-wtp').text(d3.format('.0f')(sliderWtp.value()));
 
 // // poor mans error bars
@@ -299,7 +306,7 @@ var line = svg.append('line')
 
 // When the button is changed, run the updateChart function
 // https://www.d3-graph-gallery.com/graph/connectedscatter_select.html
-d3.select("#selectButton").on("click", function(d) {
+d3.select("#selectButton").on("change", function(d) {
     // recover the option that has been chosen
     // alert(d3.select(this));
     var selectedOption = d3.select(this).property("value")
@@ -307,13 +314,20 @@ d3.select("#selectButton").on("click", function(d) {
     updateGraph(selectedOption)
 })
 
-d3.select("#slider-wtp").onchange(function(d) {
-    // recover the option that has been chosen
-    // alert(d3.select(this));
-    gWtp.call(sliderWtp)
-    // run the updateChart function with this selected option
-    updateWTP(sliderWtp.value())
-})
+// d3.select("#slider-wtp").on("drag".)
+
+// selection.on("drag", function() {
+//   dispatch.apply("custom", this, arguments);
+// });
+
+
+// d3.select("#slider-wtp").onchange(function(d) {
+//     // recover the option that has been chosen
+//     // alert(d3.select(this));
+//     gWtp.call(sliderWtp)
+//     // run the updateChart function with this selected option
+//     updateWTP(sliderWtp.value())
+// })
 
 
 
