@@ -198,11 +198,11 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
- // Add X axis
-  var x = d3.scaleLinear()
+// Add X axis
+var x = d3.scaleLinear()
     .domain([0, 5])
     .range([ 0, width ]);
-  svg.append("g")
+svg.append("g")
     .attr("transform", "translate(0," + height / 2 + ")")
     .call(d3.axisBottom(x));
 
@@ -221,7 +221,6 @@ var y = d3.scaleLinear()
     .call(d3.axisLeft(y)
           .tickFormat(d3.format('$,.2r')));
 
-
 // Add the text label for the Y axis
 svg.append("text")
     .attr("transform", "rotate(-90)")
@@ -231,7 +230,7 @@ svg.append("text")
     .style("text-anchor", "middle")
     .text("Cost difference");
 
-// Initialize dots with group a
+// Initialize point estimate dot
 var dot = svg
     .selectAll('circle')
     .data(getSubData("HR-,HER2-"))
