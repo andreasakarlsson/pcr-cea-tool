@@ -72,6 +72,7 @@ var sliderWtp = d3
     .fill('#2196f3')
     .on('end', val => {
         d3.select('p#value-wtp').text(d3.format('.0f')(val));
+        updateWTP( sliderWtp.value());
     });
 var gWtp = d3
     .select('div#slider-wtp')
@@ -164,10 +165,14 @@ function updateGraph(sub) {
 }
 
 function updateWTP(wtp) {
-    line
-        .transition()
-        .duration(1000)
+    svg.append('line')
+        .style("stroke", "steelblue")
+        .style("stroke-width", 0.02)
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", 5)
         .attr("y2", wtp * 5)
+        .attr("transform", "translate(0," + height / 2 + "), scale(" + width / 5 + "," + -height / 600000 + ")")
 }
 
 // List of groups (here I have one group per column)
