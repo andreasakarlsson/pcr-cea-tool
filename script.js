@@ -30,19 +30,22 @@ holder.append("text")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(800,20) rotate(0)");
 
+function getCEcolor (icer, wtp) {
+    if (icer <= wtp) {
+        return "black"
+    } else {
+        return "red"
+    }
+}
+
 function updateText(data) {
-
-    // adjust the range text
-    // d3.select("#nAngle-value").text(nAngle);
-    // d3.select("#nAngle").property("value", nAngle);
-
-    // getSubData("HR-,HER2-")[0].ly
 
     holder.select("text.icer")
         .text("ICER: " +
-              d3.format('$,.2r')(data.icer) + " (95% CrI " +
-              d3.format(',.2r')(data.icer_low) + "−" +
-              d3.format(',.2r')(data.icer_high) + ") per life-year");
+              d3.format('$,.3r')(data.icer) + " (95% CrI " +
+              d3.format(',.3r')(data.icer_low) + "−" +
+              d3.format(',.3r')(data.icer_high) + ") per life-year")
+        .style("fill", getCEcolor(data.icer, sliderWtp.value()))
 
     holder.select("text.ly")
         .text("Life-years: " +
@@ -52,9 +55,9 @@ function updateText(data) {
 
     holder.select("text.cost")
         .text("Cost: " +
-              d3.format('$,.2r')(data.cost) + " (95% CrI " +
-              d3.format(',.2r')(data.cost_low) + "−" +
-              d3.format(',.2r')(data.cost_high) + ")");
+              d3.format('$,.3r')(data.cost) + " (95% CrI " +
+              d3.format(',.3r')(data.cost_low) + "−" +
+              d3.format(',.3r')(data.cost_high) + ")");
 }
 
 // https://github.com/johnwalley/d3-simple-slidre
@@ -70,7 +73,6 @@ var sliderVertical = d3
     .default(0.40)
     .fill('#2196f3')
     .on('onchange', val => {
-        d3.select('p#value-vertical').text(d3.format('.2f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
         updateText(getSubData(d3.select("#selectButton").property("value"))[0]);
     });
@@ -85,7 +87,6 @@ var gVertical = d3
 
 gVertical.call(sliderVertical);
 
-// d3.select('p#value-vertical').text(d3.format('.2f')(sliderVertical.value()));
 
 // Cost slider
 var sliderCost = d3
@@ -99,7 +100,6 @@ var sliderCost = d3
     .default(50000)
     .fill('#2196f3')
     .on('onchange', val => {
-        d3.select('p#value-cost').text(d3.format('.0f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
         updateText(getSubData(d3.select("#selectButton").property("value"))[0]);
     });
@@ -114,8 +114,6 @@ var gCost = d3
 
 gCost.call(sliderCost);
 
-// d3.select('p#value-cost').text(d3.format('.0f')(sliderCost.value()));
-
 // WTP slider
 var sliderWtp = d3
     .sliderBottom()
@@ -128,8 +126,8 @@ var sliderWtp = d3
     .default(100000)
     .fill('#2196f3')
     .on('onchange', val => {
-        d3.select('p#value-wtp').text(d3.format('.0f')(val));
-        updateWTP( sliderWtp.value());
+        updateWTP(sliderWtp.value());
+        updateText(getSubData(d3.select("#selectButton").property("value"))[0]);
     });
 var gWtp = d3
     .select('div#slider-wtp')
@@ -145,7 +143,7 @@ gWtp.call(sliderWtp);
 // sliderWtp.value()
 
 // This creates a div that can be shown from html
-d3.select('p#value-wtp').text(d3.format('.0f')(sliderWtp.value()));
+// d3.select('p#value-wtp').text(d3.format('.0f')(sliderWtp.value()));
 
 // // poor mans error bars
 // var errorBarArea = d3.svg.area()
