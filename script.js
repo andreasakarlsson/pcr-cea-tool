@@ -14,7 +14,7 @@ var sliderVertical = d3
     .default(0.40)
     .fill('#2196f3')
     // https://github.com/johnwalley/d3-simple-slider
-    .on('end', val => {
+    .on('onchange', val => {
         d3.select('p#value-vertical').text(d3.format('.2f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
     });
@@ -43,7 +43,7 @@ var sliderCost = d3
     .step(10000)
     .default(50000)
     .fill('#2196f3')
-    .on('end', val => {
+    .on('onchange', val => {
         d3.select('p#value-cost').text(d3.format('.0f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
     });
@@ -70,7 +70,7 @@ var sliderWtp = d3
     .step(10000)
     .default(100000)
     .fill('#2196f3')
-    .on('end', val => {
+    .on('onchange', val => {
         d3.select('p#value-wtp').text(d3.format('.0f')(val));
         updateWTP( sliderWtp.value());
     });
@@ -159,20 +159,20 @@ function updateGraph(sub) {
     dot
         .data(getSubData(sub)) // set the new data
         .transition()
-        .duration(1000)
+        .duration(200)
         .attr("cx", function(d) { return x(d.ly) })
         .attr("cy", function(d) { return y(-d.cost) })
 }
 
 function updateWTP(wtp) {
-    svg.append('line')
-        .style("stroke", "steelblue")
-        .style("stroke-width", 0.02)
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", 5)
-        .attr("y2", wtp * 5)
-        .attr("transform", "translate(0," + height / 2 + "), scale(" + width / 5 + "," + -height / 600000 + ")")
+    // Add the line
+    line
+        .datum([{x:0, y:0}, {x:5, y:5 * wtp}])
+        .transition()
+        .duration(200)
+        .attr("d", d3.line()
+              .x(function(d) { return x(d.x) })
+              .y(function(d) { return y(d.y) }))
 }
 
 // List of groups (here I have one group per column)
@@ -246,16 +246,19 @@ var dot = svg
     .attr("r", 7)
     .style("fill", "#69b3a2")
 
+// Initialize wtp line
+var line = svg
+    .append("path")
+    .datum([{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}])
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+          .x(function(d) { return x(d.x) })
+          .y(function(d) { return y(d.y) }))
 
-//Draw the line
-var line = svg.append('line')
-    .style("stroke", "blue")
-    .style("stroke-width", 0.02)
-    .attr("x1", 0)
-    .attr("y1", 0)
-    .attr("x2", 5)
-    .attr("y2", sliderWtp.value() * 5)
-    .attr("transform", "translate(0," + height / 2 + "), scale(" + width / 5 + "," + -height / 600000 + ")")
+
+
 
 // .selectAll('line')
     // .enter()
