@@ -1,6 +1,65 @@
 // Load simulation data
 // var data = mdata;
 
+var width = 1000;
+var height = 30;
+
+var holder = d3.select("#text")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+holder.append("text")
+    .attr("class", "icer")
+    .style("fill", "black")
+    .style("font-size", "16px")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(150,20) rotate(0)");
+
+holder.append("text")
+    .attr("class", "ly")
+    .style("fill", "black")
+    .style("font-size", "16px")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(420,20) rotate(0)");
+
+holder.append("text")
+    .attr("class", "cost")
+    .style("fill", "black")
+    .style("font-size", "16px")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(700,20) rotate(0)");
+
+function updateText(data) {
+
+    // adjust the range text
+    // d3.select("#nAngle-value").text(nAngle);
+    // d3.select("#nAngle").property("value", nAngle);
+
+    // getSubData("HR-,HER2-")[0].ly
+
+    holder.select("text.icer")
+        .text("ICER: " +
+              d3.format('3.0f')(-data.icer) + " (95% CrI " +
+              d3.format('3.0f')(-data.icer_low) + "−" +
+              d3.format('3.0f')(-data.icer_high) + ")");
+
+    holder.select("text.ly")
+        .text("LY: " +
+              d3.format('.1f')(data.ly) + " (95% CrI " +
+              d3.format('.1f')(data.ly_low) + "−" +
+              d3.format('.1f')(data.ly_high) + ")");
+
+    holder.select("text.cost")
+        .text("Cost: " +
+              d3.format('3.0f')(-data.cost) + " (95% CrI " +
+              d3.format('3.0f')(-data.cost_low) + "−" +
+              d3.format('3.0f')(-data.cost_high) + ")");
+}
+
 // https://github.com/johnwalley/d3-simple-slidre
 // Vertical slider
 var sliderVertical = d3
@@ -16,6 +75,7 @@ var sliderVertical = d3
     .on('onchange', val => {
         d3.select('p#value-vertical').text(d3.format('.2f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
+        updateText(getSubData(d3.select("#selectButton").property("value"))[0]);
     });
 
 var gVertical = d3
@@ -44,7 +104,9 @@ var sliderCost = d3
     .on('onchange', val => {
         d3.select('p#value-cost').text(d3.format('.0f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
+        updateText(getSubData(d3.select("#selectButton").property("value"))[0]);
     });
+
 var gCost = d3
     .select('div#slider-cost')
     .append('svg')
@@ -120,11 +182,14 @@ function getSubData (sub) {
             if (mdata[i]["scale"] == "cost") {
                 // var costs = {cost:parseFloat(mdata[i]["val"]), cost_low:parseFloat(mdata[i]["low"]), cost_high:parseFloat(mdata[i]["high"])};
                 var cost = parseFloat(mdata[i]["val"]) * sliderVertical.value() - sliderCost.value();
-                var cost_low = parseFloat(mdata[i]["low"]) * sliderVertical.value() - sliderCost.value();
-                var cost_high = parseFloat(mdata[i]["high"]) * sliderVertical.value() - sliderCost.value();
+                // cost is actually cost reduction (high <-> low) sign conversion later. Needs to be fixed.
+                var cost_high = parseFloat(mdata[i]["low"]) * sliderVertical.value() - sliderCost.value();
+                var cost_low = parseFloat(mdata[i]["high"]) * sliderVertical.value() - sliderCost.value();
             }
-            var out = [ {ly, ly_low, ly_high, cost, cost_low, cost_high} ] ;
-            // append vectors
+            var icer = cost / ly;
+            var icer_low = cost_low / ly_high;
+            var icer_high = cost_high / ly_low;
+            var out = [ {ly, ly_low, ly_high, cost, cost_low, cost_high, icer, icer_low, icer_high} ] ;
         }
     }
     return out
@@ -135,7 +200,7 @@ function updateGraph(sub) {
     dot
         .data(getSubData(sub)) // set the new data
         .transition()
-        .duration(200)
+        .duration(100)
         .attr("cx", function(d) { return x(d.ly) })
         .attr("cy", function(d) { return y(-d.cost) })
 }
@@ -143,9 +208,9 @@ function updateGraph(sub) {
 function updateWTP(wtp) {
     // update line
     line
-        .datum([{x:0, y:0}, {x:5, y:5 * wtp}])
+        .data([[{x:0, y:0}, {x:5, y:5 * wtp}]])
         .transition()
-        .duration(200)
+        .duration(100)
         .attr("d", d3.line()
               .x(function(d) { return x(d.x) })
               .y(function(d) { return y(d.y) }))
@@ -225,7 +290,7 @@ var dot = svg
 // Initialize wtp line
 var line = svg
     .append("path")
-    .datum([{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}])
+    .data([[{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}]])
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 1.5)
@@ -233,6 +298,9 @@ var line = svg
           .x(function(d) { return x(d.x) })
           .y(function(d) { return y(d.y) }))
 
+// Place holder for CEAC-curves
+// https://stackoverflow.com/questions/13728402/what-is-the-difference-d3-datum-vs-data
+// data with multiple svgs
 
 // var pgon = svg.selectAll("polygon")
 //     .data([poly])
@@ -263,4 +331,5 @@ d3.select("#selectButton").on("change", function(d) {
     var selectedOption = d3.select(this).property("value")
     // run the updateChart function with this selected option
     updateGraph(selectedOption)
+    updateText(getSubData(selectedOption)[0]);
 })
