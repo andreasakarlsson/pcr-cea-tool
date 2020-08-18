@@ -13,7 +13,6 @@ var sliderVertical = d3
     .step(0.01)
     .default(0.40)
     .fill('#2196f3')
-    // https://github.com/johnwalley/d3-simple-slider
     .on('onchange', val => {
         d3.select('p#value-vertical').text(d3.format('.2f')(val));
         updateGraph(d3.select("#selectButton").property("value"));
@@ -38,7 +37,6 @@ var sliderCost = d3
     .max(150000)
     .width(600)
     .tickFormat(d3.format('$,.2r'))
-    // d3.format("($.2f")
     .ticks(3)
     .step(10000)
     .default(50000)
@@ -110,28 +108,6 @@ d3.select('p#value-wtp').text(d3.format('.0f')(sliderWtp.value()));
 //     .attr("stroke", "red")
 //     .attr("stroke-width", 1.5);
 
-// Select subtype
-// function getSubData (sub) {
-//     for (i in mdata) {
-//         if (mdata[i]["sub"] == sub) {
-//             if (mdata[i]["scale"] == "ly") {
-//                 var ly = parseFloat(mdata[i]["val"]);
-//                 var ly_low = parseFloat(mdata[i]["low"]);
-//                 var ly_high = parseFloat(mdata[i]["high"]);
-//             }
-//             if (mdata[i]["scale"] == "cost") {
-//                 // var costs = {cost:parseFloat(mdata[i]["val"]), cost_low:parseFloat(mdata[i]["low"]), cost_high:parseFloat(mdata[i]["high"])};
-//                 var cost = parseFloat(mdata[i]["val"]);
-//                 var cost_low = parseFloat(mdata[i]["low"]);
-//                 var cost_high = parseFloat(mdata[i]["high"]);
-//             }
-//             var out = [ {ly, ly_low, ly_high, cost, cost_low, cost_high} ];
-//             // append vectors
-//         }
-//     }
-//     return out
-// }
-
 
 function getSubData (sub) {
     for (i in mdata) {
@@ -165,7 +141,7 @@ function updateGraph(sub) {
 }
 
 function updateWTP(wtp) {
-    // Add the line
+    // update line
     line
         .datum([{x:0, y:0}, {x:5, y:5 * wtp}])
         .transition()
@@ -196,10 +172,10 @@ var margin = {top: 50, right: 20, bottom: 100, left: 120},
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
-  .append("svg")
+    .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
@@ -221,8 +197,8 @@ svg.append("text")
 // Add Y axis
 var y = d3.scaleLinear()
     .domain([-300000, 300000])
-      .range([ height, 0]);
-  svg.append("g")
+    .range([ height, 0]);
+svg.append("g")
     .call(d3.axisLeft(y)
           .tickFormat(d3.format('$,.2r')));
 
@@ -258,58 +234,26 @@ var line = svg
           .y(function(d) { return y(d.y) }))
 
 
+// var pgon = svg.selectAll("polygon")
+//     .data([poly])
+//   .enter().append("polygon")
+//     .attr("points",function(d) {
+//         return d.map(function(d) {
+//             return [scaleX(d.x),scaleY(d.y)].join(",");
+//         }).join(" ");
+//     })
+//     .attr("stroke","black")
+//     .attr("stroke-width",2);
 
-
-// .selectAll('line')
-    // .enter()
-    // .transition()
-    // .duration(1000)
-    // .attr("x1", 0)
-    // .attr("y1", 0)
-    // .attr("x2", 1000)
-    // .attr("y2", 10000)
-    // .style("stroke", "lightgreen")
-    // .style("stroke-width", 50)
-
-
-// const line = d3.line()
-//     .x(function(d) { return xScale(d.date); })
-//     .y(function(d) { return yScale(d.measurement); });
-
-// let id = 0;
-// const ids = function () {
-//     return "line-"+id++;
-// }
-
-// var linedata = [{x:0, y:0}, {x:5, y:200000}];
-
-
-// var line = svg.append("path")
-//     .data(linedata)
-//     .attr("fill", "none")
-//     .attr("stroke", "steelblue")
-//     .attr("stroke-width", 1.5)
-//     .attr("d", d3.line()
-//           .x(function(d) { return x(d.x) })
-//           .y(function(d) { return y(d.y) })
-//          )
-// svg.append('line')
-//     .style("stroke", "lightgreen")
-//     .style("stroke-width", 2)
-//     .attr("x2", 3* 100)
-//     .attr("y2", 300);
-
-
-
-  // var eb = errorBar()
-  //         .oldXScale(x)
-  //         .xScale(x)
-  //         .oldYScale(y)
-  //         .yScale(y)
-  //         .yValue(function(d){return d.cost})
-  //         .xValue(function(d){return d.ly})
-  //         .xError(function(d){return d.ly_high - d.ly_low})
-  //         .yError(function(d){return null});
+// var eb = errorBar()
+//         .oldXScale(x)
+//         .xScale(x)
+//         .oldYScale(y)
+//         .yScale(y)
+//         .yValue(function(d){return d.cost})
+//         .xValue(function(d){return d.ly})
+//         .xError(function(d){return d.ly_high - d.ly_low})
+//         .yError(function(d){return null});
 
 // When the button is changed, run the updateChart function
 // https://www.d3-graph-gallery.com/graph/connectedscatter_select.html
@@ -320,30 +264,3 @@ d3.select("#selectButton").on("change", function(d) {
     // run the updateChart function with this selected option
     updateGraph(selectedOption)
 })
-
-// d3.select("#slider-wtp").on("drag".)
-
-// selection.on("drag", function() {
-//   dispatch.apply("custom", this, arguments);
-// });
-
-
-// d3.select("#slider-wtp").onchange(function(d) {
-//     // recover the option that has been chosen
-//     // alert(d3.select(this));
-//     gWtp.call(sliderWtp)
-//     // run the updateChart function with this selected option
-//     updateWTP(sliderWtp.value())
-// })
-
-
-
-// d3.selectAll(".global-control")
-//   .on("change.pie", changePieValue)
-
-// function changePieValue(_ctrl){
-//   var ctrlValue = _ctrl.grabYourValueHere;
-//   pieChart.readjustPie(_ctrlValue);
-//   d3.select('#pie-chart-container1')
-//     .call(pieChart)
-// }
