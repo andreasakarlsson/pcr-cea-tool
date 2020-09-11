@@ -12,7 +12,7 @@ holder.append("text")
     .style("font-size", "15px")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(205,20) rotate(0)");
+    .attr("transform", "translate(205,10) rotate(0)");
 
 holder.append("text")
     .attr("class", "ly")
@@ -20,7 +20,7 @@ holder.append("text")
     .style("font-size", "15px")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(530,20) rotate(0)");
+    .attr("transform", "translate(530,10) rotate(0)");
 
 holder.append("text")
     .attr("class", "cost")
@@ -28,7 +28,7 @@ holder.append("text")
     .style("font-size", "15px")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(800,20) rotate(0)");
+    .attr("transform", "translate(800,10) rotate(0)");
 
 function getCEcolor (icer, wtp) {
     if (icer <= wtp) {
@@ -61,12 +61,12 @@ function updateText(data) {
 }
 
 // https://github.com/johnwalley/d3-simple-slidre
-// Vertical slider
-var sliderVertical = d3
-    .sliderLeft()
+// Pcr slider
+var sliderPcr = d3
+    .sliderBottom()
     .min(0)
     .max(1)
-    .height(500)
+    .width(600)
     .tickFormat(d3.format('.0%'))
     .ticks(6)
     .step(0.01)
@@ -77,16 +77,15 @@ var sliderVertical = d3
         updateText(getSubData(d3.select("#selectButton").property("value"))[0]);
     });
 
-var gVertical = d3
-    .select('div#slider-vertical')
+var gPcr = d3
+    .select('div#slider-pcr')
     .append('svg')
-    .attr('width', 100)
-    .attr('height', 620)
+    .attr('width', 700)
+    .attr('height', 50)
     .append('g')
-    .attr('transform', 'translate(70,50)');
+    .attr('transform', 'translate(30,10)');
 
-gVertical.call(sliderVertical);
-
+gPcr.call(sliderPcr);
 
 // Cost slider
 var sliderCost = d3
@@ -108,7 +107,7 @@ var gCost = d3
     .select('div#slider-cost')
     .append('svg')
     .attr('width', 700)
-    .attr('height', 70)
+    .attr('height', 50)
     .append('g')
     .attr('transform', 'translate(30,10)');
 
@@ -170,15 +169,15 @@ function getSubData (sub) {
     for (i in mdata) {
         if (mdata[i]["sub"] == sub) {
             if (mdata[i]["scale"] == "ly") {
-                var ly = parseFloat(mdata[i]["val"]) * sliderVertical.value();
-                var ly_low = parseFloat(mdata[i]["low"]) * sliderVertical.value();
-                var ly_high = parseFloat(mdata[i]["high"]) * sliderVertical.value();
+                var ly = parseFloat(mdata[i]["val"]) * sliderPcr.value();
+                var ly_low = parseFloat(mdata[i]["low"]) * sliderPcr.value();
+                var ly_high = parseFloat(mdata[i]["high"]) * sliderPcr.value();
             }
             if (mdata[i]["scale"] == "cost") {
                 // costs in mdata are actually cost reduction (e.g. sign & high <-> low fix).
-                var cost = - parseFloat(mdata[i]["val"]) * sliderVertical.value() + sliderCost.value();
-                var cost_high = - parseFloat(mdata[i]["low"]) * sliderVertical.value() + sliderCost.value();
-                var cost_low = - parseFloat(mdata[i]["high"]) * sliderVertical.value() + sliderCost.value();
+                var cost = - parseFloat(mdata[i]["val"]) * sliderPcr.value() + sliderCost.value();
+                var cost_high = - parseFloat(mdata[i]["low"]) * sliderPcr.value() + sliderCost.value();
+                var cost_low = - parseFloat(mdata[i]["high"]) * sliderPcr.value() + sliderCost.value();
             }
             var icer = cost / ly;
             var icer_low = cost_low / ly_high;
@@ -226,8 +225,8 @@ d3.select("#selectButton")
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 20, bottom: 50, left: 120},
-    width = 700 - margin.left - margin.right,
-    height = 650 - margin.top - margin.bottom;
+    width = 750 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")

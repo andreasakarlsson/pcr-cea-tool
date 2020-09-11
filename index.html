@@ -2,84 +2,159 @@
 <meta charset="utf-8" />
 <meta
     name="viewport"
-    content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=yes"
-/>
-<title>pCR-BCa-CEA-tool</title>
+    content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=yes" />
 
-<script src="https://unpkg.com/d3-simple-slider"></script>
-<!-- https://www.w3schools.com/js/js_json.asp -->
-<script type="text/javascript" src="effects.json"></script>
-<script src="errorbar.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous"
-/>
+<body>
+    <title>pCR-BCa-CEA-tool</title>
 
-<!-- <style>
-     .letterP4 {
-   -webkit-transform: rotate(-90deg);
-   -moz-transform: rotate(-90deg);
-   -ms-transform: rotate(-90deg);
-   -o-transform: rotate(-90deg);
-     transform: rotate(-90deg);
-     color: #000;
-     font-size: 16px;
-     height: 16px;
-     width: 200px;
-     float: left;
-     vertical-align:center;
-     }
-     </style>
--->
-<div class="container">
-    <h1>pCR based Cost-Effectiveness Calculator</h1>
-    <div id="text"></div>
-    <div class="row align-items-center">
-        <!-- <div class="col-sm-2"><p id="value-vertical"></p></div> -->
-        <div class="col-sm-2">
-            <div class="row align-items-center">
-                <!-- <div class="letterP4">Improvement in pCR rate</div> -->
-                <h6 class="text-center">pCR improvement</h6>
-                <div id="slider-vertical"></div>
-            </div>
-        </div>
-        <div id="my_dataviz"></div>
-    </div>
-    <div class="row align-items-top">
-        <div class="col-sm-3">
-            <div class="col align-items-left">
-                <h6 class="text-left">Breast cancer subtype</h6>
-                <!-- Initialize a select button -->
-                <select id="selectButton" class="btn btn-primary dropdown-toggle"></select>
-            </div>
-        </div>
-        <div class="col align-items-center">
-            <div class="row align-items-center">
-                <!-- <div class="col-sm-2"><p id="value-cost"></p></div> -->
+
+    <!-- https://www.w3schools.com/js/js_json.asp -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
-                <div class="row align-items-center">
-                    <div class="col-sm">
-                        <h6 class="text-center">Cost of intervention</h6>
-                        <div id="slider-cost"></div></div>
-                </div>
-            </div>
-            <div class="row align-items-center">
-                <!-- <div class="col-sm-2"><p id="value-wtp"></p></div> -->
-                <div class="row align-items-center">
-                    <div class="col-sm">
-                        <h6 class="text-center">Willingness to pay per life-year</h6>
-                        <div id="slider-wtp"></div>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+
+    <script type="text/javascript" src="effects.json"></script>
+    <!-- <script src="errorbar.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <div class="container">
+        <h1>pCR based Cost-Effectiveness Calculator</h1>
+        <div id="text"></div>
+        <div class="row align-items-center">
+            <div id="my_dataviz"></div>
+            <div class="row align-items-top">
+                <div class="col align-items-left">
+                    <!-- Initialize a select buttons -->
+                    <h6 class="text-left">Breast cancer subtype</h6>
+                    <div class="mt-3 col-md-12">
+                        <select id="selectButton" class="btn btn-primary dropdown-toggle"></select>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">
+                            About
+                        </button>
                     </div>
                 </div>
+                <div class="col align-items-left">
+                    <h6 class="text-center">Difference in pCR rate</h6>
+                    <div id="slider-pcr"></div>
+                    <h6 class="text-center">Cost of intervention</h6>
+                    <div id="slider-cost"></div>
+                    <h6 class="text-center">Willingness to pay per life-year</h6>
+                    <div id="slider-wtp"> </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="modal fade" id="infoModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Description of cost-effectiveness calculations for neoadjuvant breast cancer treatments based on the rate of pathologic complete response</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Background</h4>
+                    <p>
+                        Neoadjuvant treatment for breast cancer, allows
+                        for measuring the early endpoint, complete
+                        pathologic response (pCR). The I-SPY 2 trial (identifier: NCT01042379) uses
+                        pCR as primary outcome when screening for emerging
+                        agents. This tool allows for early assessment of a
+                        treatment's cost-effectiveness based on how much the
+                        treatment improves the pCR rate.
+                    </p>
+                    <h4>Methods</h4>
+                    <p>
+                        We developed a Markov model for predicting
+                        future life-years and costs. The model was based
+                        on I-SPY 2 data, complemented by SEER data and
+                        accounted for time-varying effects and cancer
+                        subtypes. We attained state and subtype specific
+                        costs from a systematic review of the
+                        literature.
+                    </p>
+                    <h4>Visualisation</h4>
+                    <p>
+                        The plot shows a cost-effectiveness plane with the
+                        differences in costs and life-years. The point
+                        illustrates the differences between a treatment arm
+                        and the control arm, given a difference in pCR rate,
+                        a breast cancer subtype and a cost of the
+                        intervention.
+                    </p>
+                    <h4>Predictions</h4>
+                    <p>
+                        <h5>ICER</h5>
+                        <p>
+                            Incremental cost-effectiveness ratio (ICER),
+                            summarises the cost-effectiveness of an
+                            intervention. The difference in cost is divided
+                            through the difference in effect, here
+                            expressed as US dollars per life-year.
+                        </p>
 
-<!-- Include my script.js file -->
-<script src="http://localhost:8080/skewer"></script>
-<script type="text/javascript" src="script.js"></script>
+                        <h5>Life-years gained</h5>
+                        <p>
+                            The effectiveness measure, presented as life-years
+                            gained, which is defined as the predicted life-years
+                            for the treatment arm minus the predicted life-years for the
+                            control arm.
+                        </p>
+                        <h5>Costs</h5>
+                        <p>
+                            The cost difference is defined as the predicted
+                            lifetime healthcare costs for treatment arm minus
+                            the predicted lifetime healthcare costs for the
+                            control arm.
+                        </p>
+                        <h5>CrI</h5>
+                        <p>
+                            To quantify the prediction uncertainty a
+                            probabilistic sensitivity analysis was performed and
+                            the results were used to provide 95% credible
+                            intervals (CrI).
+                        </p>
+                    </p>
+                    <h4>Interactions</h4>
+                    <p>
+                        <h5>Difference in pCR rate</h5>
+                        <p>
+                            Difference in pCR rate between the treatment and
+                            the control arm, i.e. if 60% of the women in the
+                            treatment arm had a pCR and 20% of the women in
+                            the control had a pCR the difference in pCR rate
+                            would be 40%.
+                        </p>
+                        <h5>Cost of intervention</h5>
+                        <p>
+                            The costs associated with the intervention in the
+                            treatment arm.
+                        </p>
+                        <h5>Willingness to pay per life-year</h5>
+                        <p>
+                            A threshold value, here expressed as US dollars
+                            per life-year, below which a treament is deemed
+                            cost-effective.
+                        </p>
+                        <h5>Breast cancer subtype</h5>
+                        <p>
+                            The predictions are specific to four combinations of
+                            molecular subtypes in breast cancer, determined by hormone receptor status (HR) and
+                            the status of human epidermal growth factor receptor
+                            2 (HER2).
+                        </p>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Include my script.js file -->
+    <script type="text/javascript" src="script.js"></script>
+</body>
 </html>
