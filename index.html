@@ -5,7 +5,11 @@
     content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=yes" />
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+<style type="text/css">
+ .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+ .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+ .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+</style>
 <body>
     <title>pCR-BCa-CEA-tool</title>
 
@@ -54,6 +58,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Description of cost-effectiveness calculations for neoadjuvant breast cancer treatments based on the rate of pathologic complete response</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
                     <h4>Background</h4>
@@ -74,7 +79,8 @@
                         accounted for time-varying effects and cancer
                         subtypes. We attained state and subtype specific
                         costs from a systematic review of the
-                        literature.
+                        literature, see
+                        <a data-toggle="modal" href="#costModal" class="button">this table</a>.
                     </p>
                     <h4>Visualisation</h4>
                     <p>
@@ -106,7 +112,7 @@
                         <h5>Costs</h5>
                         <p>
                             The cost difference is defined as the predicted
-                            lifetime healthcare costs for treatment arm minus
+                            lifetime healthcare costs for the treatment arm minus
                             the predicted lifetime healthcare costs for the
                             control arm.
                         </p>
@@ -151,6 +157,162 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="costModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Literature cost inputs</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+                        <colgroup>
+                            <col  class="org-left" />
+
+                            <col  class="org-right" />
+
+                            <col  class="org-left" />
+
+                            <col  class="org-right" />
+
+                            <col  class="org-right" />
+
+                            <col  class="org-left" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="org-left">State</th>
+                                <th scope="col" class="org-right">Year</th>
+                                <th scope="col" class="org-left">Subtypes</th>
+                                <th scope="col" class="org-right">Cost</th>
+                                <th scope="col" class="org-right">Range</th>
+                                <th scope="col" class="org-left">Source</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="org-left" rowspan="2">Disease-free</td>
+                                <td class="org-right">1</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$2,206</td>
+                                <td class="org-right">$1,655-2,759</td>
+                                <td class="org-left">Alvarado et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">2+</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$2,206</td>
+                                <td class="org-right">$1,655-2,759</td>
+                                <td class="org-left">Alvarado et al.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td class="org-left" rowspan="2">Local/Regional Recurrence</td>
+                                <td class="org-right">1</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$39,169</td>
+                                <td class="org-right">$29,376 - 48,961</td>
+                                <td class="org-left">Lamerato et al., Stokes et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">2+</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$5,690</td>
+                                <td class="org-right">$0 - 11,380</td>
+                                <td class="org-left">Stokes et al., Delea et al., Blumen et al.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td class="org-left" rowspan="4">Metastatic Recurrence</td>
+                                <td class="org-right">1+</td>
+                                <td class="org-left">HR+/HER2+</td>
+                                <td class="org-right">$126,391</td>
+                                <td class="org-right">$94,793 - 157,989</td>
+                                <td class="org-left">Montero et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">1+</td>
+                                <td class="org-left">HR+/HER2-</td>
+                                <td class="org-right">$75,760</td>
+                                <td class="org-right">$56,820 - 94,700</td>
+                                <td class="org-left">Montero et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">1+</td>
+                                <td class="org-left">HR-/HER2+</td>
+                                <td class="org-right">$144,049</td>
+                                <td class="org-right">$108,037 - 180,061</td>
+                                <td class="org-left">Montero et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">1+</td>
+                                <td class="org-left">HR-/HER2-</td>
+                                <td class="org-right">$189,450</td>
+                                <td class="org-right">$142,088 - 236,813</td>
+                                <td class="org-left">Montero et al.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td class="org-left" rowspan="2">Breast Cancer Death</td>
+                                <td class="org-right">1</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$44,773</td>
+                                <td class="org-right">$33,580 - 55,966</td>
+                                <td class="org-left">Alvarado et al., Schousboe et al., Sorenson et al. Warren Suh et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">2+</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$0</td>
+                                <td class="org-right">$0</td>
+                                <td class="org-left">Alvarado et al.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td class="org-left" rowspan="2">Other Cause Death</td>
+                                <td class="org-right">1</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$908</td>
+                                <td class="org-right">$665 - 1,110</td>
+                                <td class="org-left">Alvarado et al.</td>
+                            </tr>
+
+                            <tr>
+                                <td class="org-right">2+</td>
+                                <td class="org-left">All Subtypes</td>
+                                <td class="org-right">$0</td>
+                                <td class="org-right">$0</td>
+                                <td class="org-left">Alvarado et al.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
             </div>
         </div>
     </div>
