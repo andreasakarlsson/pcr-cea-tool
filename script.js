@@ -245,7 +245,6 @@ svg.append("g")
     .attr("transform", "translate(0," + height / 2 + ")")
     .call(d3.axisBottom(x));
 
-
 // Add the text label for the x axis
 svg.append("text")
     .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom - 25) + ")")
