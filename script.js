@@ -58,6 +58,9 @@ function updateText(data) {
               d3.format('$,.3r')(data.cost) + " (95% CrI " +
               d3.format(',.3r')(data.cost_low) + "−" +
               d3.format(',.3r')(data.cost_high) + ")");
+    dot
+        .attr("fill", getCEcolor(data.icer, sliderWtp.value()))
+
 }
 
 // https://github.com/johnwalley/d3-simple-slidre
@@ -192,21 +195,42 @@ function getSubData (sub) {
 function updateGraph(sub) {
     dot
         .data(getSubData(sub)) // set the new data
-        .transition()
-        .duration(100)
+        // .transition()
+        // .duration(100)
         .attr("cx", function(d) { return x(d.ly) })
         .attr("cy", function(d) { return y(d.cost) })
 }
 
 function updateWTP(wtp) {
-    // update line
-    line
-        .data([[{x:0, y:0}, {x:5, y:5 * wtp}]])
-        .transition()
-        .duration(100)
+    // update wtp area
+    area
+        .data([[{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}, {x:5, y:-250000}, {x:0, y:-250000}]])
+        // .transition()
+        // .duration(50)
         .attr("d", d3.line()
               .x(function(d) { return x(d.x) })
-              .y(function(d) { return y(d.y) }))
+              .y(function(d) { return y(d.y) }));
+    // update wtp line
+    line
+        .data([[{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}]])
+        // .transition()
+        // .duration(50)
+        .attr("d", d3.line()
+              .x(function(d) { return x(d.x) })
+              .y(function(d) { return y(d.y) }));
+
+    // for the x-axis to be on top of the wtp-area the x-axis is removed and
+    // drawn again. If it is not removed each update the text will become
+    // thicker and thicker. There might be a better way to keep the axis on top
+    // of the area. One way could be to draw two areas; one permanent below the
+    // x-axis and one dynamic above.
+    svg.selectAll("g").remove()
+    svg.append("g")
+        .attr("transform", "translate(0," + height / 2 + ")")
+        .call(d3.axisBottom(x));
+    svg.append("g")
+    .call(d3.axisLeft(y)
+          .tickFormat(d3.format('$,.2r')));
 }
 
 // List of groups (here I have one group per column)
@@ -241,11 +265,8 @@ var svg = d3.select("#my_dataviz")
 var x = d3.scaleLinear()
     .domain([0, 5])
     .range([ 0, width ]);
-svg.append("g")
-    .attr("transform", "translate(0," + height / 2 + ")")
-    .call(d3.axisBottom(x));
 
-// Add the text label for the x axis
+// Add the text label for the x-axis
 svg.append("text")
     .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom - 25) + ")")
     .style("text-anchor", "middle")
@@ -255,11 +276,8 @@ svg.append("text")
 var y = d3.scaleLinear()
     .domain([-250000, 250000])
     .range([ height, 0]);
-svg.append("g")
-    .call(d3.axisLeft(y)
-          .tickFormat(d3.format('$,.2r')));
 
-// Add the text label for the Y axis
+// Add the text label for the y-axis
 svg.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left + 20)
@@ -268,29 +286,39 @@ svg.append("text")
     .style("text-anchor", "middle")
     .text("Cost difference");
 
-// Initialize point estimate dot
-var dot = svg
-    .selectAll('circle')
-    // .data(getSubData("HR-,HER2-"))
-    .data(getSubData(d3.select("#selectButton").property("value")))
-    .enter()
-    .append('circle')
-    .attr("cx", function(d) { return x(d.ly) })
-    .attr("cy", function(d) { return y(d.cost) })
-    .attr("r", 7)
-    .style("fill", "#69b3a2")
+// Initialize wtp area
+var area = svg
+    .append("path")
+    .data([[{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}, {x:5, y:-250000}, {x:0, y:-250000}]])
+    .attr("fill", "#f3fef3")
+    .attr("stroke", "none")
+    .attr("stroke-width", 1)
+    .attr("d", d3.line()
+          .x(function(d) { return x(d.x) })
+          .y(function(d) { return y(d.y) }))
 
 // Initialize wtp line
 var line = svg
     .append("path")
     .data([[{x:0, y:0}, {x:5, y:5 * sliderWtp.value()}]])
-    .attr("fill", "none")
-    .attr("stroke", "steelblue")
-    .attr("stroke-width", 1.5)
+    .attr("stroke", "#167a16")
+    .attr("stroke-width", 2)
     .attr("d", d3.line()
           .x(function(d) { return x(d.x) })
           .y(function(d) { return y(d.y) }))
 
+// Initialize point estimate dot
+var dot = svg
+    .selectAll('circle')
+    .data(getSubData(d3.select("#selectButton").property("value")))
+    .enter()
+    .append('circle')
+    .attr("cx", function(d) { return x(d.ly) })
+    .attr("cy", function(d) { return y(d.cost) })
+    .attr("r", 6)
+    .attr("fill", "steelblue")
+
+updateWTP(sliderWtp.value());
 updateText(getSubData(d3.select("#selectButton").property("value"))[0])
 // updateText(getSubData("HR-,HER2-")[0])
 
